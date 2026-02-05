@@ -8,18 +8,17 @@ import altair as alt
 st.set_page_config(page_title="EGSA2025 Loan Investment Simulator", layout="wide")
 
 # ==========================
-# DISPLAY IMAGE AT TOP AND CENTER
+# DISPLAY LOGO AT TOP AND CENTER
 # ==========================
-# Create 3 columns, display image in the middle column
 col1, col2, col3 = st.columns([1, 2, 1])
 with col2:
-    st.image("https://github.com/Walfaanaa/EGSA2025_INVEST/EGSA.png", use_column_width=True)
+    st.image("https://raw.githubusercontent.com/Walfaanaa/EGSA2025_INVEST/main/EGSA.png", use_column_width=True)
 
 # ==========================
 # TITLE & DESCRIPTION
 # ==========================
-st.title("💰 EGSA2025 Investment Strategy Simulator")
-st.write("Simulate investing a total amount across different loan types for a given duration (in months).")
+st.markdown("<h2 style='text-align: center;'>💰 EGSA2025 Investment Strategy Simulator</h2>", unsafe_allow_html=True)
+st.markdown("<p style='text-align: center;'>Simulate investing a total amount across different loan types for a given duration (in months).</p>", unsafe_allow_html=True)
 
 # ==========================
 # USER INPUT
