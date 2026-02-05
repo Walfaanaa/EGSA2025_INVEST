@@ -7,6 +7,17 @@ import altair as alt
 # ==========================
 st.set_page_config(page_title="EGSA2025 Loan Investment Simulator", layout="wide")
 
+# ==========================
+# DISPLAY IMAGE AT TOP AND CENTER
+# ==========================
+# Create 3 columns, display image in the middle column
+col1, col2, col3 = st.columns([1, 2, 1])
+with col2:
+    st.image("https://github.com/Walfaanaa/EGSA2025_INVEST/EGSA.png", use_column_width=True)
+
+# ==========================
+# TITLE & DESCRIPTION
+# ==========================
 st.title("💰 EGSA2025 Investment Strategy Simulator")
 st.write("Simulate investing a total amount across different loan types for a given duration (in months).")
 
@@ -29,7 +40,6 @@ loans = [
 # ==========================
 # ALLOCATION STRATEGY
 # ==========================
-# Example allocation (can make this dynamic later)
 allocation = {
     "Level_1": 30000,
     "Level_2": 40000,
