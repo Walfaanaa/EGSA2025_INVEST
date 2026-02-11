@@ -11,12 +11,36 @@ st.set_page_config(
 )
 
 # ==========================
-# ANIMATED GLOW + MULTIPLE MOVING STARS
+# CUSTOM CSS (WELCOME + GLOW + STARS)
 # ==========================
 st.markdown("""
 <style>
 
+/* ================= WELCOME STAR ANIMATION ================= */
+
+@keyframes twinkle {
+    0% { opacity: 0.2; transform: scale(0.8); }
+    50% { opacity: 1; transform: scale(1.2); }
+    100% { opacity: 0.2; transform: scale(0.8); }
+}
+
+.welcome-container {
+    text-align: center;
+    font-size: 34px;
+    font-weight: bold;
+    margin-top: 10px;
+    margin-bottom: 20px;
+}
+
+.welcome-star {
+    color: gold;
+    animation: twinkle 2s infinite;
+    display: inline-block;
+    margin: 0 8px;
+}
+
 /* ================= Glow Switching ================= */
+
 @keyframes glowSwitch {
     0% {
         background: radial-gradient(circle at left, rgba(255,0,0,0.35), transparent 60%),
@@ -32,7 +56,6 @@ st.markdown("""
     }
 }
 
-/* ================= Container ================= */
 .logo-container {
     position: relative;
     display: flex;
@@ -43,30 +66,18 @@ st.markdown("""
     overflow: hidden;
 }
 
-/* ================= Star Animations ================= */
+/* ================= Moving Stars Around Logo ================= */
 
-@keyframes moveLeft1 {
-    0%   { transform: translate(-180px, -50px); }
+@keyframes moveLeft {
+    0%   { transform: translate(-180px, -40px); }
     50%  { transform: translate(-100px, 50px); }
-    100% { transform: translate(-180px, -50px); }
+    100% { transform: translate(-180px, -40px); }
 }
 
-@keyframes moveLeft2 {
-    0%   { transform: translate(-140px, 60px); }
-    50%  { transform: translate(-80px, -60px); }
-    100% { transform: translate(-140px, 60px); }
-}
-
-@keyframes moveRight1 {
-    0%   { transform: translate(180px, 50px); }
+@keyframes moveRight {
+    0%   { transform: translate(180px, 40px); }
     50%  { transform: translate(100px, -50px); }
-    100% { transform: translate(180px, 50px); }
-}
-
-@keyframes moveRight2 {
-    0%   { transform: translate(140px, -60px); }
-    50%  { transform: translate(80px, 60px); }
-    100% { transform: translate(140px, -60px); }
+    100% { transform: translate(180px, 40px); }
 }
 
 .star {
@@ -75,30 +86,34 @@ st.markdown("""
     color: gold;
 }
 
-/* Assign animations */
-.star-left-1  { animation: moveLeft1 6s ease-in-out infinite; }
-.star-left-2  { animation: moveLeft2 7s ease-in-out infinite; }
-.star-right-1 { animation: moveRight1 6s ease-in-out infinite; }
-.star-right-2 { animation: moveRight2 7s ease-in-out infinite; }
+.star-left  { animation: moveLeft 6s ease-in-out infinite; }
+.star-right { animation: moveRight 6s ease-in-out infinite; }
 
 </style>
 """, unsafe_allow_html=True)
 
 # ==========================
-# DISPLAY LOGO WITH EFFECTS
+# WELCOME HEADER
+# ==========================
+st.markdown("""
+<div class="welcome-container">
+    <span class="welcome-star">★</span>
+    Welcome EGSA2025 Investment Project
+    <span class="welcome-star" style="animation-delay:1s;">★</span>
+    <span class="welcome-star" style="animation-delay:2s;">★</span>
+</div>
+""", unsafe_allow_html=True)
+
+# ==========================
+# LOGO WITH EFFECTS
 # ==========================
 col1, col2, col3 = st.columns([1, 2, 1])
 
 with col2:
     st.markdown('<div class="logo-container">', unsafe_allow_html=True)
     
-    # Left stars
-    st.markdown('<div class="star star-left-1">★</div>', unsafe_allow_html=True)
-    st.markdown('<div class="star star-left-2">★</div>', unsafe_allow_html=True)
-
-    # Right stars
-    st.markdown('<div class="star star-right-1">★</div>', unsafe_allow_html=True)
-    st.markdown('<div class="star star-right-2">★</div>', unsafe_allow_html=True)
+    st.markdown('<div class="star star-left">★</div>', unsafe_allow_html=True)
+    st.markdown('<div class="star star-right">★</div>', unsafe_allow_html=True)
 
     st.image(
         "https://raw.githubusercontent.com/Walfaanaa/EGSA2025_INVEST/main/EGSA.png",
@@ -108,13 +123,8 @@ with col2:
     st.markdown('</div>', unsafe_allow_html=True)
 
 # ==========================
-# TITLE & DESCRIPTION
+# DESCRIPTION
 # ==========================
-st.markdown(
-    "<h2 style='text-align: center;'>💰 EGSA2025 Investment Strategy Simulator</h2>",
-    unsafe_allow_html=True
-)
-
 st.markdown(
     "<p style='text-align: center;'>Simulate investing a total amount across different loan types for a given duration (in months).</p>",
     unsafe_allow_html=True
@@ -125,17 +135,8 @@ st.divider()
 # ==========================
 # USER INPUT
 # ==========================
-total_investment = st.number_input(
-    "Total Investment (birr):",
-    value=150000,
-    step=1000
-)
-
-months = st.number_input(
-    "Investment Duration (months):",
-    value=2,
-    step=1
-)
+total_investment = st.number_input("Total Investment (birr):", value=150000, step=1000)
+months = st.number_input("Investment Duration (months):", value=2, step=1)
 
 # ==========================
 # LOAN RULES
@@ -197,10 +198,7 @@ st.subheader("📊 Profit Simulation Table")
 st.dataframe(df, use_container_width=True)
 
 total_profit_all = df["Total Profit"].sum()
-
-st.success(
-    f"💵 Total Expected Profit for {months} month(s): {round(total_profit_all, 2)} birr"
-)
+st.success(f"💵 Total Expected Profit for {months} month(s): {round(total_profit_all, 2)} birr")
 
 # ==========================
 # PROFIT CHART
