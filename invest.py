@@ -11,12 +11,12 @@ st.set_page_config(
 )
 
 # ==========================
-# ANIMATED GLOW + MOVING STAR
+# ANIMATED GLOW + MULTIPLE MOVING STARS
 # ==========================
 st.markdown("""
 <style>
 
-/* Glow switching animation */
+/* ================= Glow Switching ================= */
 @keyframes glowSwitch {
     0% {
         background: radial-gradient(circle at left, rgba(255,0,0,0.35), transparent 60%),
@@ -32,47 +32,79 @@ st.markdown("""
     }
 }
 
-/* Star movement animation */
-@keyframes moveStar {
-    0%   { transform: translate(-120px, 0px); }
-    25%  { transform: translate(0px, -60px); }
-    50%  { transform: translate(120px, 0px); }
-    75%  { transform: translate(0px, 60px); }
-    100% { transform: translate(-120px, 0px); }
-}
-
+/* ================= Container ================= */
 .logo-container {
     position: relative;
     display: flex;
     justify-content: center;
-    padding: 40px;
-    border-radius: 25px;
+    padding: 60px;
+    border-radius: 30px;
     animation: glowSwitch 10s infinite;
+    overflow: hidden;
 }
 
-/* Moving star */
-.moving-star {
-    position: absolute;
-    font-size: 30px;
-    color: gold;
-    animation: moveStar 6s linear infinite;
+/* ================= Star Animations ================= */
+
+@keyframes moveLeft1 {
+    0%   { transform: translate(-180px, -50px); }
+    50%  { transform: translate(-100px, 50px); }
+    100% { transform: translate(-180px, -50px); }
 }
+
+@keyframes moveLeft2 {
+    0%   { transform: translate(-140px, 60px); }
+    50%  { transform: translate(-80px, -60px); }
+    100% { transform: translate(-140px, 60px); }
+}
+
+@keyframes moveRight1 {
+    0%   { transform: translate(180px, 50px); }
+    50%  { transform: translate(100px, -50px); }
+    100% { transform: translate(180px, 50px); }
+}
+
+@keyframes moveRight2 {
+    0%   { transform: translate(140px, -60px); }
+    50%  { transform: translate(80px, 60px); }
+    100% { transform: translate(140px, -60px); }
+}
+
+.star {
+    position: absolute;
+    font-size: 22px;
+    color: gold;
+}
+
+/* Assign animations */
+.star-left-1  { animation: moveLeft1 6s ease-in-out infinite; }
+.star-left-2  { animation: moveLeft2 7s ease-in-out infinite; }
+.star-right-1 { animation: moveRight1 6s ease-in-out infinite; }
+.star-right-2 { animation: moveRight2 7s ease-in-out infinite; }
 
 </style>
 """, unsafe_allow_html=True)
 
 # ==========================
-# DISPLAY LOGO WITH EFFECT
+# DISPLAY LOGO WITH EFFECTS
 # ==========================
 col1, col2, col3 = st.columns([1, 2, 1])
 
 with col2:
     st.markdown('<div class="logo-container">', unsafe_allow_html=True)
-    st.markdown('<div class="moving-star">★</div>', unsafe_allow_html=True)
+    
+    # Left stars
+    st.markdown('<div class="star star-left-1">★</div>', unsafe_allow_html=True)
+    st.markdown('<div class="star star-left-2">★</div>', unsafe_allow_html=True)
+
+    # Right stars
+    st.markdown('<div class="star star-right-1">★</div>', unsafe_allow_html=True)
+    st.markdown('<div class="star star-right-2">★</div>', unsafe_allow_html=True)
+
     st.image(
         "https://raw.githubusercontent.com/Walfaanaa/EGSA2025_INVEST/main/EGSA.png",
         use_column_width=True
     )
+
     st.markdown('</div>', unsafe_allow_html=True)
 
 # ==========================
@@ -93,8 +125,17 @@ st.divider()
 # ==========================
 # USER INPUT
 # ==========================
-total_investment = st.number_input("Total Investment (birr):", value=150000, step=1000)
-months = st.number_input("Investment Duration (months):", value=2, step=1)
+total_investment = st.number_input(
+    "Total Investment (birr):",
+    value=150000,
+    step=1000
+)
+
+months = st.number_input(
+    "Investment Duration (months):",
+    value=2,
+    step=1
+)
 
 # ==========================
 # LOAN RULES
@@ -156,7 +197,10 @@ st.subheader("📊 Profit Simulation Table")
 st.dataframe(df, use_container_width=True)
 
 total_profit_all = df["Total Profit"].sum()
-st.success(f"💵 Total Expected Profit for {months} month(s): {round(total_profit_all, 2)} birr")
+
+st.success(
+    f"💵 Total Expected Profit for {months} month(s): {round(total_profit_all, 2)} birr"
+)
 
 # ==========================
 # PROFIT CHART
