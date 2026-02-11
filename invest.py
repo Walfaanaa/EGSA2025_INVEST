@@ -98,7 +98,7 @@ st.markdown("""
 st.markdown("""
 <div class="welcome-container">
     <span class="welcome-star">★</span>
-    Welcome to EGSA2025 Investment Project
+    Welcome To EGSA2025 Investment Project
     <span class="welcome-star" style="animation-delay:1s;">★</span>
     <span class="welcome-star" style="animation-delay:2s;">★</span>
 </div>
@@ -213,4 +213,5 @@ chart = alt.Chart(df).mark_bar().encode(
 )
 
 st.altair_chart(chart, use_container_width=True)
+
 
