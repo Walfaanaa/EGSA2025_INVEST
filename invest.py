@@ -11,11 +11,12 @@ st.set_page_config(
 )
 
 # ==========================
-# ANIMATED RED & GREEN GLOW STYLE
+# ANIMATED GLOW + MOVING STAR
 # ==========================
 st.markdown("""
 <style>
 
+/* Glow switching animation */
 @keyframes glowSwitch {
     0% {
         background: radial-gradient(circle at left, rgba(255,0,0,0.35), transparent 60%),
@@ -31,24 +32,43 @@ st.markdown("""
     }
 }
 
-.logo-glow {
+/* Star movement animation */
+@keyframes moveStar {
+    0%   { transform: translate(-120px, 0px); }
+    25%  { transform: translate(0px, -60px); }
+    50%  { transform: translate(120px, 0px); }
+    75%  { transform: translate(0px, 60px); }
+    100% { transform: translate(-120px, 0px); }
+}
+
+.logo-container {
+    position: relative;
     display: flex;
     justify-content: center;
-    padding: 30px;
+    padding: 40px;
     border-radius: 25px;
     animation: glowSwitch 10s infinite;
+}
+
+/* Moving star */
+.moving-star {
+    position: absolute;
+    font-size: 30px;
+    color: gold;
+    animation: moveStar 6s linear infinite;
 }
 
 </style>
 """, unsafe_allow_html=True)
 
 # ==========================
-# DISPLAY LOGO WITH ANIMATION
+# DISPLAY LOGO WITH EFFECT
 # ==========================
 col1, col2, col3 = st.columns([1, 2, 1])
 
 with col2:
-    st.markdown('<div class="logo-glow">', unsafe_allow_html=True)
+    st.markdown('<div class="logo-container">', unsafe_allow_html=True)
+    st.markdown('<div class="moving-star">★</div>', unsafe_allow_html=True)
     st.image(
         "https://raw.githubusercontent.com/Walfaanaa/EGSA2025_INVEST/main/EGSA.png",
         use_column_width=True
@@ -68,22 +88,13 @@ st.markdown(
     unsafe_allow_html=True
 )
 
+st.divider()
+
 # ==========================
 # USER INPUT
 # ==========================
-st.divider()
-
-total_investment = st.number_input(
-    "Total Investment (birr):",
-    value=150000,
-    step=1000
-)
-
-months = st.number_input(
-    "Investment Duration (months):",
-    value=2,
-    step=1
-)
+total_investment = st.number_input("Total Investment (birr):", value=150000, step=1000)
+months = st.number_input("Investment Duration (months):", value=2, step=1)
 
 # ==========================
 # LOAN RULES
@@ -145,10 +156,7 @@ st.subheader("📊 Profit Simulation Table")
 st.dataframe(df, use_container_width=True)
 
 total_profit_all = df["Total Profit"].sum()
-
-st.success(
-    f"💵 Total Expected Profit for {months} month(s): {round(total_profit_all, 2)} birr"
-)
+st.success(f"💵 Total Expected Profit for {months} month(s): {round(total_profit_all, 2)} birr")
 
 # ==========================
 # PROFIT CHART
