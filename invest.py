@@ -5,26 +5,85 @@ import altair as alt
 # ==========================
 # PAGE SETUP
 # ==========================
-st.set_page_config(page_title="EGSA2025 Loan Investment Simulator", layout="wide")
+st.set_page_config(
+    page_title="EGSA2025 Loan Investment Simulator",
+    layout="wide"
+)
 
 # ==========================
-# DISPLAY LOGO AT TOP AND CENTER
+# ANIMATED RED & GREEN GLOW STYLE
+# ==========================
+st.markdown("""
+<style>
+
+@keyframes glowSwitch {
+    0% {
+        background: radial-gradient(circle at left, rgba(255,0,0,0.35), transparent 60%),
+                    radial-gradient(circle at right, rgba(0,255,0,0.35), transparent 60%);
+    }
+    50% {
+        background: radial-gradient(circle at right, rgba(255,0,0,0.35), transparent 60%),
+                    radial-gradient(circle at left, rgba(0,255,0,0.35), transparent 60%);
+    }
+    100% {
+        background: radial-gradient(circle at left, rgba(255,0,0,0.35), transparent 60%),
+                    radial-gradient(circle at right, rgba(0,255,0,0.35), transparent 60%);
+    }
+}
+
+.logo-glow {
+    display: flex;
+    justify-content: center;
+    padding: 30px;
+    border-radius: 25px;
+    animation: glowSwitch 10s infinite;
+}
+
+</style>
+""", unsafe_allow_html=True)
+
+# ==========================
+# DISPLAY LOGO WITH ANIMATION
 # ==========================
 col1, col2, col3 = st.columns([1, 2, 1])
+
 with col2:
-    st.image("https://raw.githubusercontent.com/Walfaanaa/EGSA2025_INVEST/main/EGSA.png", use_column_width=True)
+    st.markdown('<div class="logo-glow">', unsafe_allow_html=True)
+    st.image(
+        "https://raw.githubusercontent.com/Walfaanaa/EGSA2025_INVEST/main/EGSA.png",
+        use_column_width=True
+    )
+    st.markdown('</div>', unsafe_allow_html=True)
 
 # ==========================
 # TITLE & DESCRIPTION
 # ==========================
-st.markdown("<h2 style='text-align: center;'>💰 EGSA2025 Investment Strategy Simulator</h2>", unsafe_allow_html=True)
-st.markdown("<p style='text-align: center;'>Simulate investing a total amount across different loan types for a given duration (in months).</p>", unsafe_allow_html=True)
+st.markdown(
+    "<h2 style='text-align: center;'>💰 EGSA2025 Investment Strategy Simulator</h2>",
+    unsafe_allow_html=True
+)
+
+st.markdown(
+    "<p style='text-align: center;'>Simulate investing a total amount across different loan types for a given duration (in months).</p>",
+    unsafe_allow_html=True
+)
 
 # ==========================
 # USER INPUT
 # ==========================
-total_investment = st.number_input("Total Investment (birr):", value=150000, step=1000)
-months = st.number_input("Investment Duration (months):", value=2, step=1)
+st.divider()
+
+total_investment = st.number_input(
+    "Total Investment (birr):",
+    value=150000,
+    step=1000
+)
+
+months = st.number_input(
+    "Investment Duration (months):",
+    value=2,
+    step=1
+)
 
 # ==========================
 # LOAN RULES
@@ -46,8 +105,8 @@ allocation = {
     "Level_4": 40000
 }
 
-# Adjust allocation proportionally if total != total_investment
 total_alloc = sum(allocation.values())
+
 if total_alloc != total_investment:
     scale = total_investment / total_alloc
     for k in allocation:
@@ -61,14 +120,13 @@ results = []
 for loan in loans:
     loan_type = loan["Loan Type"]
     capital = allocation.get(loan_type, 0)
-    num_loans = capital // loan["Amount"]  # integer number of loans that can be funded
-    
-    # total cycles over the investment period (fractional cycles allowed)
+
+    num_loans = capital // loan["Amount"]
     cycles_total = (months * 30) / loan["Duration_days"]
-    
+
     profit_per_loan = loan["Amount"] * loan["Interest"]
     total_profit = num_loans * profit_per_loan * cycles_total
-    
+
     results.append({
         "Loan Type": loan_type,
         "Capital Allocated": capital,
@@ -84,10 +142,13 @@ df = pd.DataFrame(results)
 # DISPLAY RESULTS
 # ==========================
 st.subheader("📊 Profit Simulation Table")
-st.dataframe(df)
+st.dataframe(df, use_container_width=True)
 
 total_profit_all = df["Total Profit"].sum()
-st.success(f"💵 Total Expected Profit for {months} month(s): {round(total_profit_all, 2)} birr")
+
+st.success(
+    f"💵 Total Expected Profit for {months} month(s): {round(total_profit_all, 2)} birr"
+)
 
 # ==========================
 # PROFIT CHART
